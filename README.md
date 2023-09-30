@@ -1,6 +1,6 @@
 # arrow_K-game_py
 
-instal using pyinstaller
-terminal 
-pip installer pyinstller
-pyinstaller game.py --onefile
+install using pyinstaller >
+terminal >
+pip install pyinstaller >
+pyinstaller game.py --onefile 
