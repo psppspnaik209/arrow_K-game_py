@@ -14,7 +14,7 @@ arrow_colors = {
     'Right': 'orange',
 }
 
-# function to start the game
+# Function to start the game
 def start_game():
     global score, current_arrow
     score = 0
@@ -22,16 +22,16 @@ def start_game():
     current_arrow = generate_arrow()
     show_arrow(current_arrow)
 
-# function to make a random arrow direction text
+# Function to make a random arrow direction text
 def generate_arrow():
     directions = ['Up', 'Down', 'Left', 'Right']
     return random.choice(directions)
 
-# function to show the arrow text on the GUI with the correct color
+# Function to show the arrow text on the GUI with the correct color
 def show_arrow(arrow):
     arrow_label.config(text=arrow, fg=arrow_colors[arrow])
 
-# function to handle key presses
+# Function to handle key presses
 def on_key_press(event):
     global score, current_arrow
     if event.keysym == current_arrow:
@@ -42,19 +42,19 @@ def on_key_press(event):
     else:
         end_game()
 
-# function to update the score
+# Function to update the score
 def update_score():
     score_label.config(text=f'Score: {score}')
     update_high_score()
 
-# function to update the high score
+# Function to update the high score
 def update_high_score():
     global high_score
     if score > high_score:
         high_score = score
         high_score_label.config(text=f'High Score: {high_score}')
 
-# function to end the game
+# Function to end the game
 def end_game():
     global score, current_arrow
     score_label.config(text=f'Game Over! Your Score: {score}')
@@ -63,15 +63,20 @@ def end_game():
     score = 0
     current_arrow = None
 
-# function to restart the game using the Restart button
+# Function to restart the game using the Restart button
 def restart_game(event=None):
     start_game()
 
-# the main GUI window
+# Function to toggle "Always on Top" on/off
+def toggle_always_on_top():
+    current_state = root.attributes('-topmost')
+    root.attributes('-topmost', not current_state)
+
+# The main GUI window
 root = tk.Tk()
 root.title('Arrow Key Game')
 
-# fixed window size
+# Fixed window size
 root.geometry("400x200")
 
 # Create and configure GUI elements
@@ -86,6 +91,10 @@ score_label.pack()
 
 high_score_label = tk.Label(root, text='High Score: 0', font=('Helvetica', 18))
 high_score_label.pack()
+
+# Button to toggle "Always on Top"
+always_on_top_button = tk.Button(root, text='Toggle Always on Top', command=toggle_always_on_top)
+always_on_top_button.pack()
 
 # Bind key presses to the game
 root.bind('<Up>', on_key_press)
