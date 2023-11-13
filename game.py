@@ -8,10 +8,10 @@ current_arrow = None
 
 # colors for the text arrows
 arrow_colors = {
-    'Up': 'red',
-    'Down': 'blue',
-    'Left': 'green',
-    'Right': 'orange',
+    'Up': 'yellow',
+    'Down': 'green',
+    'Left': 'blue',
+    'Right': 'red',
 }
 
 # Function to start the game
