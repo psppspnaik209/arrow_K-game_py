@@ -1,12 +1,14 @@
 import tkinter as tk
 import random
+import pygame
+from pygame.locals import JOYAXISMOTION, JOYBUTTONDOWN
 
-# main game variables
+# Main game variables
 score = 0
 high_score = 0
 current_arrow = None
 
-# colors for the text arrows
+# Colors for the text arrows
 arrow_colors = {
     'Up': 'yellow',
     'Down': 'green',
@@ -35,6 +37,38 @@ def show_arrow(arrow):
 def on_key_press(event):
     global score, current_arrow
     if event.keysym == current_arrow:
+        score += 1
+        update_score()
+        current_arrow = generate_arrow()
+        show_arrow(current_arrow)
+    else:
+        end_game()
+
+# Function to handle joystick events
+def on_joy_event(event):
+    global score, current_arrow
+    if event.type == JOYAXISMOTION:
+        # Check left joystick or right joystick movement
+        if event.axis in (0, 1, 3, 4):  # X and Y axes for both left and right joysticks
+            axis_value = event.dict['value']
+            if axis_value < -0.5:
+                handle_joystick_movement('Left')
+            elif axis_value > 0.5:
+                handle_joystick_movement('Right')
+
+    elif event.type == JOYBUTTONDOWN:
+        # Check D-pad buttons
+        if event.dict['button'] in (0, 1, 2, 3):
+            handle_joystick_movement(['Up', 'Down', 'Left', 'Right'][event.dict['button']])
+
+        # Check Start button
+        elif event.dict['button'] == 7:
+            restart_game()
+
+# Function to handle joystick movement
+def handle_joystick_movement(direction):
+    global score, current_arrow
+    if direction == current_arrow:
         score += 1
         update_score()
         current_arrow = generate_arrow()
@@ -106,6 +140,23 @@ root.bind('<Right>', on_key_press)
 root.bind('<space>', restart_game)
 root.bind('<Return>', restart_game)
 root.bind('<KP_Enter>', restart_game)  # Numpad Enter
+
+# Initialize pygame for joystick handling
+pygame.init()
+
+# Joystick setup
+joystick_count = pygame.joystick.get_count()
+if joystick_count > 0:
+    joystick = pygame.joystick.Joystick(0)
+    joystick.init()
+    pygame.event.set_allowed([JOYAXISMOTION, JOYBUTTONDOWN])
+
+    # Bind joystick events to handle joystick movements
+    root.bind('<Motion>', on_joy_event)
+    root.bind('<Button-1>', on_joy_event)
+    root.bind('<Button-3>', on_joy_event)
+    root.bind('<Button-2>', on_joy_event)
+    root.bind('<B1-Motion>', on_joy_event)
 
 # Start the GUI main loop
 root.mainloop()
