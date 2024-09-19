@@ -1,5 +1,7 @@
 # arrow_K-game_py
 
+Simple game played with arrow keys on keybaord
+
 install using pyinstaller >
 terminal >
 pip install pyinstaller >
